@@ -1,0 +1,9 @@
+fastapi==0.115.6
+uvicorn==0.32.1
+retell-sdk==5.25.1
+python-dotenv==1.0.1
+httpx==0.27.2
+pydantic==2.10.3
+gspread==6.1.4
+google-auth==2.37.0
+resend==2.5.1

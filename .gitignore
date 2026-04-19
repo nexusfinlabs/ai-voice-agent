@@ -1,0 +1,14 @@
+.env
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.bak
+output.log
+leads.json
+index.html
+.DS_Store
+data/
+vault/
+web/node_modules/
+web/.next/
