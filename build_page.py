@@ -40,8 +40,8 @@ def build_js_properties(props):
         lng  = p.get("lng") or -0.4036
         url  = p.get("url") or ""
 
-        # Fotos placeholder consistentes (Unsplash inmobiliaria)
-        photos = [
+        # Fotos: usa p["fotos"] si existe, sino fallback generico
+        photos = p.get("fotos") or [
             f"https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=700&q=75&v={ref}",
             f"https://images.unsplash.com/photo-1484154218962-a197022b5858?w=700&q=75&v={ref}",
             f"https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=700&q=75&v={ref}",
@@ -78,7 +78,8 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Nucleo Inmobiliaria — El Campello</title>
-<link rel="stylesheet" href="/nucleo/leaflet.css"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27><rect width=%2764%27 height=%2764%27 fill=%27%23ffffff%27/><text x=%2732%27 y=%2746%27 font-family=%27Arial Black,Arial,sans-serif%27 font-size=%2448%27 font-weight=%27900%27 text-anchor=%27middle%27 fill=%27%239b111e%27>N</text></svg>"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:system-ui,-apple-system,sans-serif;height:100dvh;overflow:hidden;display:flex;flex-direction:column;background:#fff}
@@ -202,7 +203,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:12px 2
     </div>
   </div>
 </div>
-<script src="/nucleo/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script src="https://cdn.jsdelivr.net/npm/retell-client-js-sdk/dist/index.umd.js"></script>
 <script>
 var WA='<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.888-.788-1.489-1.761-1.663-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>';
@@ -251,7 +252,7 @@ function legend(){
   d.innerHTML='<div class="lt">Comerciales</div>'+rows;
 }
 function initMap(){
-  mp=L.map("map",{center:[38.4356,-0.4036],zoom:14,zoomControl:false});
+  mp=L.map("map",{center:[38.4275,-0.3955],zoom:15,zoomControl:false});
   L.control.zoom({position:"bottomright"}).addTo(mp);
   L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",{attribution:"CARTO",maxZoom:19}).addTo(mp);
   PP.forEach(function(p,i){
