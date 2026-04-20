@@ -1,14 +1,111 @@
+# ============================================================
+# NUCLEO - .gitignore
+# Stack: Python (FastAPI) + Node (WA gateway) + artefactos HTML
+# ============================================================
+
+# === SECRETOS (nunca committear) ===
 .env
+.env.*
+!.env.example
+gateway.env
+*.env.local
+vault/
+credentials.json
+*credentials*.json
+service-account*.json
+*.pem
+*.key
+*.crt
+
+# === Python ===
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+.eggs/
+dist/
+build/
 venv/
 .venv/
-__pycache__/
-*.pyc
-*.bak
-output.log
-leads.json
-index.html
-.DS_Store
-data/
-vault/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.log
+
+# === Node / JS (gateway_v2.js, web/) ===
+node_modules/
 web/node_modules/
 web/.next/
+web/out/
+web/dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+package-lock.json.bak
+
+# === Artefactos generados por build_page.py ===
+index.html
+debug_page.html
+leads.json
+output.log
+
+# === Backups y temporales ===
+*.bak
+*.bak.*
+*.backup
+*.old
+*.orig
+*.swp
+*.swo
+*~
+.#*
+\#*\#
+
+# === macOS / IDE / SO ===
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# === Logs y PID ===
+*.log
+*.pid
+logs/
+nucleo.log
+nucleo.pid
+
+# === Data local (no subir CSVs / scraping dumps) ===
+data/
+*.sqlite
+*.sqlite3
+*.db
+
+# === WhatsApp gateway auth (baileys session) ===
+auth_info/
+auth_info_*/
+wa-session/
+session.json
+
+# === Coverage / tests ===
+.coverage
+coverage.xml
+.pytest_cache/
+.tox/
+
+# === Temporales deploy ===
+*.tar.gz
+*.zip
+deploy_*.log

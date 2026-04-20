@@ -47,7 +47,7 @@ app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], all
 
 BASE_DIR              = Path(__file__).resolve().parent
 SECRET_TOKEN          = os.getenv("SECRET_TOKEN", "")
-AGENT_TRANSFER_NUMBER = os.getenv("AGENT_TRANSFER_NUMBER", "+34663103334")
+AGENT_TRANSFER_NUMBER = os.getenv("AGENT_TRANSFER_NUMBER", "+34919934651")
 VOICE_TRANSFER_NUMBER = os.getenv("VOICE_TRANSFER_NUMBER", "+34919934651")
 RETELL_API_KEY        = os.getenv("RETELL_API_KEY", "")
 RETELL_AGENT_ID       = os.getenv("RETELL_AGENT_ID", "")

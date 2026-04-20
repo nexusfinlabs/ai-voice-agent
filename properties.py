@@ -68,10 +68,10 @@ PROPERTIES_FALLBACK: list[dict] = [
 
 AGENTS_FALLBACK: dict[str, dict] = {
     "carlos":  {"nombre": "Carlos",  "telefono": "+34623343056"},
-    "loreto":  {"nombre": "Loreto",  "telefono": "+34633103334"},
-    "antonio": {"nombre": "Antonio", "telefono": "+34633103334"},
-    "fran":    {"nombre": "Fran",    "telefono": "+34633103334"},
-    "pablo":   {"nombre": "Pablo",   "telefono": "+34633103334"},
+    "loreto":  {"nombre": "Loreto",  "telefono": "+34663103334"},
+    "antonio": {"nombre": "Antonio", "telefono": "+34663103334"},
+    "fran":    {"nombre": "Fran",    "telefono": "+34663103334"},
+    "pablo":   {"nombre": "Pablo",   "telefono": "+34663103334"},
 }
 
 

@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from properties import get_properties, get_agents
 
 WA_NUMBER = "34663103334"
-PHONE_TEL = "+34663103334"
+PHONE_TEL = "+34919934651"
 
 
 def build_js_properties(props):
