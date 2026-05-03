@@ -268,6 +268,16 @@ async function connectToWhatsApp() {
 
       const { route, cleanBody } = resolved;
 
+      let typingInterval = null;
+      try {
+        await sock.sendPresenceUpdate('composing', jid);
+        typingInterval = setInterval(() => {
+          sock.sendPresenceUpdate('composing', jid).catch(() => {});
+        }, 8000);
+      } catch (err) {
+        log.warn('Presence composing failed: %s', err.message);
+      }
+
       // ── Forward al microservicio ─────────────────────────────────────────────
       try {
         const { reply } = await forwardToService(route.url, {
@@ -293,6 +303,9 @@ async function connectToWhatsApp() {
         await sock.sendMessage(jid, {
           text: '⚠️ Hay un problema técnico. Un momento y lo resolvemos.',
         });
+      } finally {
+        if (typingInterval) clearInterval(typingInterval);
+        try { await sock.sendPresenceUpdate('paused', jid); } catch {}
       }
     }
   });
