@@ -114,6 +114,9 @@ function touchSession(sender) {
   if (s) s.lastAt = Date.now();
 }
 
+let currentSock      = null;
+let apiServerStarted = false;
+
 // ── Router ────────────────────────────────────────────────────────────────────
 // Devuelve { route: {slug, url}, cleanBody } o null
 function resolveRoute(sender, rawBody) {
@@ -151,7 +154,7 @@ async function forwardToService(url, payload) {
 }
 
 // ── API server outbound ───────────────────────────────────────────────────────
-function startApiServer(sock) {
+function startApiServer() {
   const app = express();
   app.use(express.json());
 
@@ -159,9 +162,10 @@ function startApiServer(sock) {
   app.post('/api/send', async (req, res) => {
     const { target, message } = req.body || {};
     if (!target || !message) return res.status(400).json({ error: 'target and message required' });
+    if (!currentSock) return res.status(503).json({ error: 'whatsapp not connected' });
     try {
       const jid = target.includes('@') ? target : `${target.replace('+', '')}@s.whatsapp.net`;
-      await sock.sendMessage(jid, { text: message });
+      await currentSock.sendMessage(jid, { text: message });
       log.info('API OUT → %s (%d chars)', jid, message.length);
       res.json({ success: true });
     } catch (err) {
@@ -206,6 +210,7 @@ async function connectToWhatsApp() {
     generateHighQualityLinkPreview: false,
     syncFullHistory:           false,
   });
+  currentSock = sock;
 
   sock.ev.on('creds.update', saveCreds);
 
@@ -231,8 +236,11 @@ async function connectToWhatsApp() {
     if (type !== 'notify') return;
 
     for (const msg of messages) {
-      if (msg.key.fromMe)                         continue;
-      if (msg.key.remoteJid === 'status@broadcast') continue;
+      if (msg.key.fromMe)                                continue;
+      if (msg.key.remoteJid === 'status@broadcast')      continue;
+      if (msg.key.remoteJid?.endsWith('@g.us'))          continue;
+      if (msg.key.remoteJid?.endsWith('@newsletter'))    continue;
+      if (msg.key.remoteJid?.endsWith('@broadcast'))     continue;
 
       const rawSender  = msg.key.participant || msg.key.remoteJid || '';
       const jid        = msg.key.remoteJid || rawSender;
@@ -254,9 +262,7 @@ async function connectToWhatsApp() {
       const resolved = resolveRoute(senderId, body);
 
       if (!resolved) {
-        // Sin prefix ni sesión → menú
-        await sock.sendMessage(jid, { text: WELCOME_MSG });
-        log.info('WELCOME → ***%s (no route)', senderId.slice(-4));
+        log.info('IGNORE ***%s (no prefix, no session)', senderId.slice(-4));
         continue;
       }
 
@@ -291,7 +297,10 @@ async function connectToWhatsApp() {
     }
   });
 
-  startApiServer(sock);
+  if (!apiServerStarted) {
+    apiServerStarted = true;
+    startApiServer();
+  }
 }
 
 // ── Boot ─────────────────────────────────────────────────────────────────────
